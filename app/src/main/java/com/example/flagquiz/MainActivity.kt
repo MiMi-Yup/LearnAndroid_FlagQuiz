@@ -2,7 +2,6 @@ package com.example.flagquiz
 
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.os.Bundle
@@ -15,13 +14,12 @@ import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
     companion object {
-        public val CHOICES: String = "pref_numberOfChoices"
-        public val REGIONS: String = "pref_regionsToInclude"
-        public val getData: MainActivity = MainActivity()
+        val CHOICES: String = "pref_numberOfChoices"
+        val REGIONS: String = "pref_regionsToInclude"
     }
 
-    public var phoneDevice: Boolean = true
-    public var preferencesChange = true
+    var phoneDevice: Boolean = true
+    var preferencesChange: Boolean = true
 
     private val preferencesChangeListener: SharedPreferences.OnSharedPreferenceChangeListener =
         object : SharedPreferences.OnSharedPreferenceChangeListener {
@@ -40,14 +38,14 @@ class MainActivity : AppCompatActivity() {
                     mainFragment.updateGuessRows(sharedPreferences)
                     mainFragment.resetQuiz()
                 } else if (key.equals(MainActivity.REGIONS)) {
-                    var regions = sharedPreferences?.getStringSet(MainActivity.REGIONS, null)
+                    var regions = sharedPreferences.getStringSet(MainActivity.REGIONS, null)
 
                     if (regions != null && regions.size > 0) {
                         mainFragment.updateRegions(sharedPreferences)
                         mainFragment.resetQuiz()
                     } else {
                         emptyRegions = true
-                        val editor: SharedPreferences.Editor = sharedPreferences!!.edit()
+                        val editor: SharedPreferences.Editor = sharedPreferences.edit()
                         regions?.add(getString(R.string.default_region))
                         editor.putStringSet(MainActivity.REGIONS, regions)
                         editor.apply()
@@ -93,14 +91,14 @@ class MainActivity : AppCompatActivity() {
             .registerOnSharedPreferenceChangeListener(preferencesChangeListener)
 
         var screenSize: Int =
-            getResources().getConfiguration().screenLayout.and(Configuration.SCREENLAYOUT_SIZE_MASK)
+            resources.configuration.screenLayout.and(Configuration.SCREENLAYOUT_SIZE_MASK)
 
         if (screenSize == Configuration.SCREENLAYOUT_SIZE_LARGE || screenSize == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
             phoneDevice = false
         }
 
         if (phoneDevice) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
     }
 

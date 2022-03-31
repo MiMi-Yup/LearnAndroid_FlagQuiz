@@ -15,6 +15,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         tools:layout="@layout/fragment_setting" />
+
     <fragment
         android:id="@+id/FragmentMain"
         class="com.example.flagquiz.FragmentMain"

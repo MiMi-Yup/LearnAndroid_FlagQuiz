@@ -2,9 +2,6 @@ package com.example.flagquiz
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.app.AlertDialog
-import android.app.Dialog
-import android.content.DialogInterface
 import android.content.SharedPreferences
 import android.content.res.AssetManager
 import android.graphics.drawable.Drawable
@@ -22,28 +19,13 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import kotlinx.android.synthetic.main.fragment_main.*
 import java.io.IOException
 import java.io.InputStream
 import java.security.SecureRandom
 import java.util.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [FragmentMain.newInstance] factory method to
- * create an instance of this fragment.
- */
 class FragmentMain : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
     private val TAG: String = "FlagQuiz"
     private val FLAGS_IN_QUIZ: Int = 10
 
@@ -59,14 +41,6 @@ class FragmentMain : Fragment() {
     private lateinit var shakeAnimation: Animation
     private lateinit var guessLinearLayouts: Array<LinearLayout>
     private lateinit var quizLinearLayout: LinearLayout
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -104,7 +78,7 @@ class FragmentMain : Fragment() {
                         if (guess.equals(answer)) {
                             correctAnswers++
 
-                            txtAnswer.setText(answer + "!")
+                            txtAnswer.text = answer + "!"
                             txtAnswer.setTextColor(
                                 resources.getColor(
                                     R.color.correct_answer,
@@ -150,7 +124,7 @@ class FragmentMain : Fragment() {
         }
 
         val txtQuestionNumber = view.findViewById<TextView>(R.id.txtQuestionNumber)
-        txtQuestionNumber.setText(resources.getString(R.string.question, 1, FLAGS_IN_QUIZ))
+        txtQuestionNumber.text = resources.getString(R.string.question, 1, FLAGS_IN_QUIZ)
 
         return view
     }
@@ -164,7 +138,7 @@ class FragmentMain : Fragment() {
         }
     }
 
-    public fun updateGuessRows(sharedPreferences: SharedPreferences): Unit {
+    fun updateGuessRows(sharedPreferences: SharedPreferences): Unit {
         var choices: String? = sharedPreferences.getString(MainActivity.CHOICES, null)
         guessRows = choices!!.toInt() / 2
 
@@ -177,11 +151,11 @@ class FragmentMain : Fragment() {
         }
     }
 
-    public fun updateRegions(sharedPreferences: SharedPreferences): Unit {
+    fun updateRegions(sharedPreferences: SharedPreferences): Unit {
         regionSet = sharedPreferences.getStringSet(MainActivity.REGIONS, null)!!
     }
 
-    public fun resetQuiz(): Unit {
+    fun resetQuiz(): Unit {
         val assets: AssetManager = requireActivity().assets
         fileNameList.clear()
 
@@ -220,7 +194,7 @@ class FragmentMain : Fragment() {
         val nextImage: String = quizCountriesList.removeAt(0)
 
         correctAnswer = nextImage
-        txtQuestionNumber.setText(getString(R.string.question, (correctAnswers + 1), FLAGS_IN_QUIZ))
+        txtQuestionNumber.text = getString(R.string.question, (correctAnswers + 1), FLAGS_IN_QUIZ)
         txtAnswer.visibility = View.INVISIBLE
 
         val region: String = nextImage.substring(0, nextImage.indexOf('-'))
@@ -247,7 +221,7 @@ class FragmentMain : Fragment() {
                 newBtnGuess.isEnabled = true
 
                 var fileName = fileNameList.get(row * 2 + column)
-                newBtnGuess.setText(getCountryName(fileName))
+                newBtnGuess.text = getCountryName(fileName)
             }
         }
 
@@ -255,7 +229,7 @@ class FragmentMain : Fragment() {
         val column: Int = random.nextInt(2)
         val randomRow: LinearLayout = guessLinearLayouts[row]
         val countryName: String = getCountryName(correctAnswer)
-        (randomRow.getChildAt(column) as Button).setText(countryName)
+        (randomRow.getChildAt(column) as Button).text = countryName
     }
 
     private fun getCountryName(name: String): String {
@@ -293,27 +267,7 @@ class FragmentMain : Fragment() {
             )
         }
 
-        animator.setDuration(500)
+        animator.duration = 500
         animator.start()
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FragmentMain.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FragmentMain().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 }

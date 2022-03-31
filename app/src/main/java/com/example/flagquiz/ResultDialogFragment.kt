@@ -1,6 +1,5 @@
 package com.example.flagquiz
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,12 +15,10 @@ class ResultDialogFragment : DialogFragment() {
     ): View? {
         var view: View = inflater.inflate(R.layout.fragment_result_dialog, container, false)
 
-        view.txtResultDialog.setText(
-            getString(
-                R.string.results,
-                arguments?.getInt("totalGuesses"),
-                (100.0 * arguments?.getInt("flagInQuiz")!! / arguments?.getInt("totalGuesses")!!)
-            )
+        view.txtResultDialog.text = getString(
+            R.string.results,
+            arguments?.getInt("totalGuesses"),
+            (100.0 * arguments?.getInt("flagInQuiz")!! / arguments?.getInt("totalGuesses")!!)
         )
 
         view.btnPlayAgain.setOnClickListener(object : View.OnClickListener {
@@ -37,7 +34,4 @@ class ResultDialogFragment : DialogFragment() {
         return view
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-    }
 }
